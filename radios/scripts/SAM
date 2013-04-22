@@ -1,0 +1,126 @@
+#!/bin/bash
+#
+#  NOM: SAM
+#  AUTOR: Toni Serna Rossello 
+#  DATA_CREACIO: Feb 2002
+#  DATA_DARRERA_REVISIO: Jul 2008
+#  VERSIO: 2.0
+#  SINTAXI:      
+#    [/bin/bash] SAM Menu_file [Header_script]
+#
+#  DESCRIPCIO: Sistema Automatic de Menus per consola de text.
+#    Aquest script per al shell bash genera menus a partir de la informacio
+#    inclosa a un arxiu de configuracio. Des de cada opcio de menu es pot
+#    executar qualsevol comanda/es UNIX, per exemple es poden executar sripts
+#    o fer altres cridades a SAM per executar submenus.
+#    Abans de mostrar el menu es pot executar un script inicial en el qual
+#    es pot pintar el titol del menu o fer les operacion d'inicialitzacio
+#    necessaries.
+#    Una forma interessant d'usar-lo es generant el propi arxiu de menu al
+#    mateix arxiu de capcalera. Tambe es possible modificar o generar l'arxiu
+#    de menu des d'una comanda cridada amb una de les opcions del mateix menu.
+#
+#  FORMAT DELS ARXIUS DE MENu:
+#    Es tracta d'arxius ordinaris de text amb la següent estructura
+#        Text opcio 1 del menu:comanda1 
+#        Text opcio 2 del menu:comanda2 
+#          ...
+#        Text opcio N del menu:coamndaN 
+#    El fitxer de menu pot tenir linies en blanc.
+#    Les linies que comencin amb # seran ignorades, usau-les per incloure
+#    comentaris als vostres arxius de menu
+#		
+#
+
+function esnumeric()
+{
+    expr 1 + $1 >/dev/null 2>&1
+}
+
+# Codi principal de SAM
+
+# Inici depuracio de parametres
+
+if [ ! $1 ]
+then
+    echo -e "\aError (1): Falta el indicar un arxiu de menu" >&2
+    exit 1
+fi
+MENUFILE=$1
+
+if [ ! -r $MENUFILE ] 
+then
+    echo -e "\aError (2): <$MENUFILE> no existeix o no es pot llegir" >&2
+    exit 2
+fi
+
+if [ $2 ]
+then
+    HEADSCRIPT=$2
+    if [ ! -r $HEADSCRIPT ]
+    then
+        echo -e "\aError (3): <$HEADSCRIPT> no existeix o no es pot executar" >&2
+        exit 3
+    fi
+fi
+
+# Final depuracio basica de parametres
+
+# Es dibuixa el menu i es respon a la peticio de l'usuari
+OPC= 
+while [ "$OPC" != 0 ]
+do
+    clear
+
+    # Si s'ha especificat. Primer executam l'script inicial.
+    if [ $HEADSCRIPT ]
+    then
+	bash $HEADSCRIPT
+    fi
+
+    # Processam el fitxer de menu linia a linia
+    LCOUNT=0
+    while read LINIA
+    do
+	# Saltam comentaris i linies en blanc
+        if echo $LINIA | grep "^[[:space:]]*[^#]" >/dev/null 2>&1
+        then
+            LCOUNT=$[ $LCOUNT + 1 ]
+            # De cada linia extreim els seus 2 camps
+            TEXT=`echo $LINIA | cut -d ":" -f1`
+            COMMAND=`echo $LINIA | cut -d ":" -f2`
+
+            # Comprovam que els 2 camps estiguin ben informats
+            if [ "$TEXT" = "" -o "$COMMAND" = "" ]
+            then
+                echo -e "\aError (5): A la linia no. $LCOUNT del menu esta incompleta" >&2
+                exit 5
+            fi
+    
+            # Mostram el text de l'opcio de menu actual
+            echo "$LCOUNT) $TEXT"
+            # Construim variables amb nom serialitzat per cada opcio de menu
+            # P.ex. la variable EXEC12 conte la comanda a executar en triar la opcio 12 del menu
+            eval EXEC$LCOUNT=\"$COMMAND\"
+        fi
+    done < $MENUFILE
+
+    #Afegim una opcio per poder acabar el menu
+    echo "0) Salir"
+    echo -ne "\nHaga su Seleccion [0-$LCOUNT]: "
+    read OPC    
+    # Verificam que l'entrada es numerica.
+    if esnumeric $OPC && [ "$OPC" -ge 0 -a "$OPC" -le $LCOUNT ]
+    then
+        #Executam la comanda associada fent que es sustitueixi la variable
+        #corresponent a l'opcio escollida
+	eval eval \$EXEC$OPC
+    else
+        #S'ha indicat una opcio invalida
+        echo -e "\a\nEscoje un numero. entre 0 y $LCOUNT"
+	echo Pulse qualquier tecla para continuar...
+	read -n 1
+    fi
+done
+clear
+exit 0

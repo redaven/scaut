@@ -1,0 +1,3 @@
+#!/bin/bash
+for trans in $(ps aux |grep sc_trans |grep -v grep |awk {'print $11'} |cut -d "/" -f 2); do kill -9  `pidof $trans` ;done
+

@@ -1,0 +1,3 @@
+#!/bin/bash 
+clear
+SAM /opt/radios/original/menu.sam

@@ -1,0 +1,8 @@
+#!/bin/bash
+home_radio=/opt/radios/servers
+musica=/home/shared/Disco1/musica/
+cd $home_radio/$1
+find  $musica -iname "*.mp3" > playlist.lst
+kill -9 `ps aux |grep USR1 |grep -v grep |head -n 1 |awk {'print $2'}`
+
+nohup ./sc_trans_linux$1 sc_trans.conf USR1 2> /dev/null & 

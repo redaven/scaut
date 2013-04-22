@@ -1,0 +1,118 @@
+Shoutcast Automation Scripts By _TuXeD_
+
+
+Son un conjunto de scripts para la automatización de creación de radios Online en muy pocos pasos
+
+Incluye las siguientes Herramientas:
+
+crea_radio               Crea las Configuraciónes del servidor preguntando datos , password , numero usuarios
+crea_radiomail           Igual que la anterior pero envia un correo al mail indicado con los datos
+
+radioup                  Enciende la radio , ejemplo radioup 8081 , levantaria la radio que escucha en el puerto 8081
+killradio 		 Para el servidor Shoutcast.
+
+autodj 			 Reproduce un flujo de stream a traves de una playlist.
+killautodj 		 Para el autodj 
+
+nextsong		 Cambia a la cancion siguiente de la playlist. 
+updateplaylist		 Genera una lista de reproducción mirando el directorio Content del servidor.
+
+Updatechannel		 Genera una playlist segun el estilo indicado ( la musica debe estar en directorios por estilo)
+crea_web		 Genera una sencilla pagina web con un reproductor en flash.
+
+##################################################################################################################
+
+Sintaxís :
+
+Todos los scripts funcionan igual 
+
+ejemplo:
+
+##### Crear radio #####
+
+crea_radio 8081
+Password: lapassword
+Users Max: 500  // Número maximo de oyentes
+
+###### Generar Playlist ##########
+
+updateplaylist 8081
+
+###### Activar Radio #########
+
+radioup 8081
+
+###### Activar Autodj ########
+
+autodj 8081
+
+###### Generar Playlist Por estilo #####
+
+create_channel 8081
+
+Este script lee el directorio $global_audio definido en config.inc
+
+mostrando los directorios , al pulsar el numero correspondiente al directorio nos generara una playlist del estilo seleccionado.
+
+###### Generar Listas reproducción para diferentes reproductores
+web_pls 8081 domain
+
+donde domain sera nuestro  dominio.
+
+este script genera listas de reproducion
+
+listen.pls   ( Stream shoutcast , normalmente usado por Winamp , xmms , audacious)
+listen.rm    (Stream para RealMedia)
+listen.m3u   ( Stream de Flujos en Crudo )
+listen.asx   ( Stream comunmente usado por Windows Media Player )
+
+
+###### Parar Todos los servidores
+
+killallservers
+
+##### Parar Todos los Autodj 
+
+killallsources 
+
+
+NOTA: Se aconseja no utilizar espacios en los nombres de los directorios.
+
+Tambien se puede emitir desde el exterior mediante sc_trans en caso de linux o el plugin de shoutcast para xmms
+y en Windows usando DSP-Plugin 
+
+para mas información http://howto.tuxed.es
+
+Consejo:
+
+Si eres empresa de Hosting Puedes crear un servicio FTP al directorio content de cada usuario, es interesante aplicar quotas.
+
+
+El servidor utiliza 2 puertos , puerto asignado + puerto asignado +1
+en el caso del ejemplo nuestro servidor utiliza los puertos 8081 y 8082.
+
+######################### Opciones del Script de arranque
+
+start 
+
+Para levantar las radios que quiera simplemente tiene de editar el archivo /etc/radios/radios.conf
+simplemente debe indicar los puertos en formato lista por ejemplo
+
+8081
+8000
+
+esto iniciara las radios 8081 y 8000 independientemente de que haya mas radios
+
+stop
+
+Para las radios indicadas en el archivo de configuración
+
+todon
+
+lee el contenido de home_server y inicia todas las radios contenidas en el
+
+todoff
+
+para todas las radios de home_server
+
+

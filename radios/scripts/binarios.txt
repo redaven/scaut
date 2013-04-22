@@ -1,0 +1,15 @@
+autodj
+binarios.txt
+crea_radio
+crea_radiomail
+create_channel
+crea_web
+killallservers
+killallsources
+killautodj
+killradio
+nextsong
+radio_menu
+radioup
+SAM
+updateplaylist

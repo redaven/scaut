@@ -1,0 +1,7 @@
+Crea Radio: read -p "Puerto: " port ; bash /usr/bin/crea_radio port
+Levantar Radio: read -p "Puerto: " port ;  bash /usr/bin/radioup port
+Levantar Autodj : read -p "Puerto: " port ; bash /usr/bin/autodj port
+Matar Radio : read -p "Puerto: " port ; bash /usr/bin/killradio port
+Matar autodj : read -p "Puerto: " port ; bash /usr/bin/killautodj port
+Actualizar Playlist : read -p "Puerto: " port ; bash /usr/bin/updateplaylist port
+Actualizar Canal : read -p "Puerto: " port ; bash /usr/bin/create_channel port

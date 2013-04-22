@@ -1,0 +1,6 @@
+#!/bin/bash
+source /opt/radios/config.inc
+
+cd $home_server/$1
+killall sc_trans_linux$1
+nohup ./sc_trans_linux$1 sc_trans.conf WINCH 2> /dev/null & 

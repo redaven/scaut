@@ -1,0 +1,20 @@
+#!/bin/bash
+source /opt/radios/config.inc
+
+cat  << PLS > $directorio_web/$1/listen.pls
+[playlist]
+NumberOfEntries=1
+File1=http://$2:$1/
+PLS
+
+cat << M3U > $directorio_web/$1/listen.m3u
+http://$2:$1
+M3U
+
+cat << ASX > $directorio_web/$1/listen.asx
+http://$2:$1
+ASX
+
+cat << RM > $directorio_web/$1/listen.rm
+http://$2:$1
+RM

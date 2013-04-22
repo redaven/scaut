@@ -1,0 +1,53 @@
+#!/bin/bash
+source /opt/radios/config.inc
+
+clear
+read -p "IP/DOMINIO: " domain
+read -p "Color Fondo: " color
+read -p "Color Titulo: " title_color
+read -p "URL Imagen: " url
+mkdir $directorio_web/$1
+cp -rf $web_template/* $directorio_web/$1
+
+cat << WEB > $directorio_web/$1/index.html
+<html>
+<body bgcolor="$color">
+<center>
+</br>
+<font color="$title_color" > <h1> SolarUX Networks $1 </h1> </font>
+<center>
+<img src="$url">
+</center>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+</br>
+       <div align="center">
+                           <object
+			   classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" 
+			   codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab 
+			   #version=7,0,0,0" name="dewplayer" width="64" height="20" align="absmiddle" id="dewplayer">
+			                         <param name="wmode" value="transparent" />
+						                       <param name="allowScriptAccess" value="sameDomain" />
+								                             <param name="movie"
+											     value="dewplayer.swf?mp3=$domain:$1/;bgcolor=000000" />
+											                           <param name="quality" value="high" />
+														                         <param name="bgcolor" value="FFFFFF" />
+																	                       <embed
+																			       src="dewplayer.swf?mp3=http://$domain:$1/; 
+																			       bgcolor=000000" quality="high" bgcolor="FFFFFF" width="64" height="20"
+																			       name="dew                                             player"
+																			       wmode="transparent" align="absmiddle" allowscriptaccess="sameDomain" typ 
+																			       e="application/x-shockwave-flash"
+																			       pluginspage="http://www.macromedia.com/go/getf 
+																			       lashplayer"></embed>
+
+																			       </div>
+																			       </body>
+																			       </html>
+WEB

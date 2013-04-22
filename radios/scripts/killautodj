@@ -1,0 +1,2 @@
+#!/bin/bash
+killall sc_trans_linux$1

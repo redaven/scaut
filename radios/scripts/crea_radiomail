@@ -1,0 +1,37 @@
+#!/bin/bash
+source /opt/radios/config.inc
+clear
+cd $home_radio
+logfile="$home_server/$1/datos.txt"
+mkdir $1
+cp -rf  original/*  $home_server/$1
+cd $home_server/$1
+mv sc_serv sc_serv$1
+mv sc_trans_linux sc_trans_linux$1
+
+read -p "Password: " password
+read -p "Users Max :" max
+read -p "Mail: " mail
+cat sc_trans.conf | sed -e s/la_pass/$password/g | \
+  sed -e s/"SolarUX Networks"/"SolarUX Networks $1"/g | \
+  sed -e s/puerto/$1/g > sc_trans2.conf
+mv sc_trans2.conf sc_trans.conf
+
+cat sc_serv.conf | sed -e s/la_pass/$password/g | \
+  sed -e s/puertillo/$1/g | \
+  sed -e s/maximo/$max/g > sc_serv2.conf
+mv sc_serv2.conf sc_serv.conf
+
+chmod 777 *
+echo "Datos Para Radio $1" > $logfile
+echo " " >> $logfile
+echo "Servidor www.tuxed.es" >> $logfile
+echo " "  >> $logfile 
+echo "Usuario: admin " >> $logfile
+echo "Password: $password" >> $logfile
+echo "Numero Oyentes: $max" >> $logfile
+echo " " >> $logfile
+echo "Gracias Por usar los servicios de SolarUX Networks" >> $logfile
+radioup $1
+
+cat $logfile |mail -s "DATOS RADIO $1" $mail

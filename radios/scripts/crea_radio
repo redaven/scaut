@@ -1,0 +1,27 @@
+#!/bin/bash
+source /opt/radios/config.inc
+cd $home_radio
+mkdir $home_server/$1
+cp -rf  original/*  $home_server/$1
+cd $home_server/$1
+mv sc_serv sc_serv$1
+mv sc_trans_linux sc_trans_linux$1
+
+clear
+read -p "Password: " password
+read -p "Users Max :" max
+cat sc_trans.conf | sed -e s/la_pass/$password/g | \
+  sed -e s/"SolarUX Networks"/"SolarUX Networks $1"/g | \
+  sed -e s/puerto/$1/g > sc_trans2.conf
+mv sc_trans2.conf sc_trans.conf
+
+cat sc_serv.conf | sed -e s/la_pass/$password/g | \
+  sed -e s/puertillo/$1/g | \
+  sed -e s/maximo/$max/g > sc_serv2.conf
+mv sc_serv2.conf sc_serv.conf
+
+chmod 777 *
+
+echo "Ya puedes iniciar la radio con radioup $1"
+echo " " 
+echo "Crea la lista de reproduccion e Inicia la radio con autodj $1 "

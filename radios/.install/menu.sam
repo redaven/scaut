@@ -1,0 +1,10 @@
+#echo aaaaa
+
+Instalar : bash $PWD/.install/install.sh
+Desinstalar : bash $PWD/.install/uninstall.sh
+Actualizar : bash $PWD/.install/update.sh
+Documentación : less $PWD/.install/README
+Licencia : less $PWD/.install/LICENSE
+
+
+

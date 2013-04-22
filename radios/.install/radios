@@ -1,0 +1,101 @@
+#!/bin/bash
+
+# Obtencion Variables 
+
+source /opt/radios/config.inc
+
+## FI configuracio ##
+
+retval=0
+
+case "$1" in
+
+'start')
+
+
+  if [ $test -e "$radios" ]; then
+
+    for start in $(cat $radios | grep -v "#") ; do echo "Iniciando Radio $start" ;  radioup $start ; autodj $start ; done
+    
+    retval=0
+
+     
+
+  else
+
+      echo "$0: No se ha encontrado  $radios"
+
+      retval=1
+
+  fi
+
+  ;;
+
+'stop')
+
+  if [ $test -e "$radios" ]; then
+
+      for start in $(cat $radios |grep -v "#" ) ; do echo "Parando Radio $start" ;  killradio  $start ; done
+
+          retval=0
+
+else
+
+      echo "$0: No se ha encontrado  $radios"
+
+            retval=1
+fi
+
+  ;;
+
+'todon')
+
+ if [ $test -e "$home_server" ]; then
+
+   for start in $(ls $home_server) ; do echo "Iniciando Radio $start" ;  radioup  $start ;autodj $start ; done
+
+
+      retval=0
+
+else
+
+            echo "$0: $home_server no esta definido."
+
+	                retval=1
+
+  fi
+
+  ;;
+
+'todoff')
+
+ if [ $test -e "$home_server" ]; then
+
+    for start in $(ls $home_server) ; do echo "Parando Radio $start" ;  killradio  $start ;killautodj $start ; done
+
+
+          retval=0
+
+	  else
+
+	              echo "$0: $home_server no esta definido."
+
+		                              retval=1
+
+					        fi
+
+
+
+;;
+
+ *)
+
+  echo "Utilitzacion $0  { start | stop | todon | todoff }"
+
+  ;;
+
+ 
+
+esac
+
+exit $retval

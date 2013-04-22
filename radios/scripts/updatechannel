@@ -1,0 +1,10 @@
+#!/bin/bash
+source /opt/radios/config.inc
+
+find $general_audio/$2 -iname "*.mp3" > $home_server/$1/playlist.lst
+
+killall `ps aux |grep 8082 |grep USR1 |awk {'print $11'} |cut -d "/" -f 2 |uniq`
+
+cd $home_server/$1
+
+nohup ./sc_trans_linux$1 sc_trans.conf USR1 2> /dev/null &

@@ -1,0 +1,5 @@
+#!/bin/bash
+source /opt/radios/config.inc
+cd $home_server/$1/
+nohup ./sc_serv$1 2> /dev/null &
+

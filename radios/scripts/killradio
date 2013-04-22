@@ -1,0 +1,3 @@
+#!/bin/bash
+killall sc_trans_linux$1
+killall sc_serv$1

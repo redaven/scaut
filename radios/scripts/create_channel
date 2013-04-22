@@ -1,0 +1,7 @@
+#!/bin/bash
+
+source /opt/radios/config.inc 
+rm /tmp/audio.sam
+
+for menu in  $(ls $general_audio -l |grep drw |awk {'print $8'} ) ; do echo "$menu : echo "Lista $menu creada correctamente" ;read pause ;  `which bash` `which updatechannel` $1  $menu " >> /tmp/audio.sam ;done && SAM /tmp/audio.sam
+
